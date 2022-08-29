@@ -1,7 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { ChampionList } from "./src/components/ChampionList";
-import { ChampionDetail } from "./src/components/ChampionDetail";
+import {
+  ChampionDetail,
+  ChampionDetailMemoized,
+} from "./src/components/ChampionDetail";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -11,8 +14,14 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="ChampionList" component={ChampionList} />
-        <Stack.Screen name="ChampionDetail" component={ChampionDetail} />
+        <Stack.Screen name="ChampionList" component={ChampionList} options={{title: 'Champions'}} />
+        <Stack.Screen
+          name="ChampionDetail"
+          component={ChampionDetailMemoized}
+          options={({ route }) => ({
+            title: route.params.champion.name,
+          })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
