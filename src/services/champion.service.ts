@@ -1,5 +1,10 @@
 import axiosInstance from "../axios.instance";
-import { Champion, ChampionImage, ChampionSkin } from "../models/champion";
+import {
+  Champion,
+  ChampionImage,
+  ChampionSkin,
+  ChampionStats,
+} from "../models/champion";
 
 export class ChampionService {
   async getChampions(): Promise<Champion[]> {
@@ -12,7 +17,7 @@ export class ChampionService {
         const {
           data: {
             data: {
-              [champion.id]: { skins },
+              [champion.id]: { skins, stats },
             },
           },
         } = await axiosInstance.get(`data/en_US/champion/${champion.id}.json`);
@@ -40,6 +45,28 @@ export class ChampionService {
                 skin.chromas,
                 champion
               )
+          ),
+          new ChampionStats(
+            stats.hp,
+            stats.hpperlevel,
+            stats.mp,
+            stats.mpperlevel,
+            stats.movespeed,
+            stats.armor,
+            stats.armorperlevel,
+            stats.spellblock,
+            stats.spellblockperlevel,
+            stats.attackrange,
+            stats.hpregen,
+            stats.hpregenperlevel,
+            stats.mpregen,
+            stats.mpregenperlevel,
+            stats.crit,
+            stats.critperlevel,
+            stats.attackdamage,
+            stats.attackdamageperlevel,
+            stats.attackspeedperlevel,
+            stats.attackspeed
           )
         );
       })

@@ -15,13 +15,18 @@ export function ChampionItem({ champion }: { champion: Champion }) {
       underlayColor="#DDDDDD"
       onPress={() => navigateToChampionDetail()}
     >
-      <View>
+      <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
         <Image
           source={{ uri: champion.image.full }}
-          style={{ width: 30, height: 30 }}
+          style={{
+            width: 68,
+            height: 68,
+          }}
         />
-        <Text>{champion.name}</Text>
-        <Text>{champion.title}</Text>
+        <View>
+          <Text>{champion.name}</Text>
+          <Text>{champion.title}</Text>
+        </View>
       </View>
     </TouchableHighlight>
   );
