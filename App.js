@@ -1,85 +1,75 @@
-import { GLView } from "expo-gl";
-import { Renderer, TextureLoader } from "expo-three";
-import { useEffect } from "react";
+import { StyleSheet } from "react-native";
+import { ChampionList } from "./src/components/ChampionList";
+import { ChampionDetailMemoized } from "./src/components/ChampionDetail";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AppLoading from "expo-app-loading";
 import {
-  AmbientLight,
-  BoxBufferGeometry,
-  Fog,
-  GridHelper,
-  Mesh,
-  MeshStandardMaterial,
-  PerspectiveCamera,
-  PointLight,
-  Scene,
-  SpotLight,
-} from "three";
+  useFonts,
+  Inter_100Thin,
+  Inter_200ExtraLight,
+  Inter_300Light,
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  Inter_800ExtraBold,
+  Inter_900Black,
+} from "@expo-google-fonts/inter";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let timeout;
+  let [fontsLoaded] = useFonts({
+    Inter_100Thin,
+    Inter_200ExtraLight,
+    Inter_300Light,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    Inter_800ExtraBold,
+    Inter_900Black,
+  });
 
-  useEffect(() => {
-    // Clear the animation loop when the component unmounts
-    return () => clearTimeout(timeout);
-  }, []);
-
-  const onContextCreate = async (gl) => {
-    const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
-    const sceneColor = 0x6ad6f0;
-
-    // Create a WebGLRenderer without a DOM element
-    const renderer = new Renderer({ gl });
-    renderer.setSize(width, height);
-    renderer.setClearColor(sceneColor);
-
-    const camera = new PerspectiveCamera(70, width / height, 0.01, 1000);
-    camera.position.set(2, 5, 5);
-
-    const scene = new Scene();
-    scene.fog = new Fog(sceneColor, 1, 10000);
-    scene.add(new GridHelper(10, 10));
-
-    const ambientLight = new AmbientLight(0x101010);
-    scene.add(ambientLight);
-
-    const pointLight = new PointLight(0xffffff, 2, 1000, 1);
-    pointLight.position.set(0, 200, 200);
-    scene.add(pointLight);
-
-    const spotLight = new SpotLight(0xffffff, 0.5);
-    spotLight.position.set(0, 500, 100);
-    spotLight.lookAt(scene.position);
-    scene.add(spotLight);
-
-    const cube = new IconMesh();
-    scene.add(cube);
-
-    camera.lookAt(cube.position);
-
-    function update() {
-      cube.rotation.y += 0.05;
-      cube.rotation.x += 0.025;
-    }
-
-    // Setup an animation loop
-    const render = () => {
-      timeout = requestAnimationFrame(render);
-      update();
-      renderer.render(scene, camera);
-      gl.endFrameEXP();
-    };
-    render();
-  };
-
-  return <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} />;
-}
-
-class IconMesh extends Mesh {
-  constructor() {
-    super(
-      new BoxBufferGeometry(1.0, 1.0, 1.0),
-      new MeshStandardMaterial({
-        map: new TextureLoader().load(require("./icon.jpg")),
-      })
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="ChampionList"
+            component={ChampionList}
+            options={{
+              title: "Champions",
+              headerStyle: {
+                backgroundColor: "#fff",
+              },
+              headerTitleStyle: {
+                fontFamily: "Inter_600SemiBold",
+                fontSize: 30,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="ChampionDetail"
+            component={ChampionDetailMemoized}
+            options={({ route }) => ({
+              title: route.params.champion.name,
+            })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
