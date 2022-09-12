@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList, RefreshControl, View, StyleSheet } from "react-native";
 import { Champion } from "../models/champion";
 import { ChampionService } from "../services/champion.service";
-import { ChampionItem } from "./ChampionItem";
+import { ChampionItem, ChampionItemMemoized } from "./ChampionItem";
 import { SearchBar } from "./SearchBar";
 
 export function ChampionList() {
@@ -19,11 +19,7 @@ export function ChampionList() {
     setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    loadChampions();
-  }, []);
-
-  const newResult = useMemo(() => {
+  const newChampionsFiltered = useMemo(() => {
     if (searchText === "") {
       return champions;
     }
@@ -34,20 +30,22 @@ export function ChampionList() {
   }, [champions, searchText]);
 
   useEffect(() => {
-    setChampionsFiltered(newResult);
-  }, [newResult]);
+    loadChampions();
+  }, []);
+
+  useEffect(() => {
+    setChampionsFiltered(newChampionsFiltered);
+  }, [newChampionsFiltered]);
 
   return (
     <View style={styles.container}>
       <SearchBar onChangeText={(text) => setSearchText(text)} />
-      <View style={styles.container.separator} />
+      <View style={styles.separator} />
       <FlatList
         data={championsFiltered}
-        renderItem={({ item }) => <ChampionItem champion={item} />}
+        renderItem={({ item }) => <ChampionItemMemoized champion={item} />}
         keyExtractor={(item) => item.id.toString()}
-        ItemSeparatorComponent={() => (
-          <View style={styles.container.list.separator} />
-        )}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
         refreshing={isLoading}
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={loadChampions} />
@@ -61,13 +59,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    separator: {
-      height: 16,
-    },
-    list: {
-      separator: {
-        height: 16,
-      },
-    },
+  },
+  separator: {
+    height: 16,
   },
 });

@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
 import {
   View,
   Image,
@@ -34,6 +35,8 @@ export function ChampionItem({ champion }: { champion: Champion }) {
     </TouchableHighlight>
   );
 }
+
+export const ChampionItemMemoized = React.memo(ChampionItem);
 
 const styles = StyleSheet.create({
   container: {

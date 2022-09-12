@@ -17,7 +17,7 @@ export class ChampionService {
         const {
           data: {
             data: {
-              [champion.id]: { skins, stats },
+              [champion.id]: { skins, stats, lore },
             },
           },
         } = await axiosInstance.get(`data/en_US/champion/${champion.id}.json`);
@@ -27,6 +27,7 @@ export class ChampionService {
           champion.name,
           champion.title,
           champion.key,
+          lore,
           new ChampionImage(
             champion.image.full,
             champion.image.sprite,
@@ -34,7 +35,8 @@ export class ChampionService {
             champion.image.x,
             champion.image.y,
             champion.image.w,
-            champion.image.h
+            champion.image.h,
+            champion
           ),
           skins.map(
             (skin: any) =>

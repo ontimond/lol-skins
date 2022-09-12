@@ -8,11 +8,16 @@ export class ChampionImage {
     public x: number,
     public y: number,
     public w: number,
-    public h: number
+    public h: number,
+    public champion: Champion
   ) {}
 
   public get full(): string {
     return API_CHAMP_SQUARE_IMG_URL + this._full;
+  }
+
+  public get splash(): string {
+    return API_CHAMP_SPLASH_IMG_URL + this.champion.id + "_0.jpg";
   }
 }
 
@@ -22,6 +27,7 @@ export class Champion {
     public name: string,
     public title: string,
     public key: string,
+    public lore: string,
     public image: ChampionImage,
     public skins: ChampionSkin[],
     public stats: ChampionStats
