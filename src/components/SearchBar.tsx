@@ -1,27 +1,27 @@
+import { BlurView } from "expo-blur";
 import { TextInput, StyleSheet } from "react-native";
 
 export function SearchBar(props) {
   return (
-    <TextInput
-      style={styles.container}
-      placeholder="Search"
-      placeholderTextColor="#BDBDBD"
-      onChangeText={(text) => props.onChangeText(text)}
-    />
+    <BlurView tint="dark">
+      <TextInput
+        style={styles.input}
+        placeholder="Search"
+        placeholderTextColor="#D0CAF4"
+        onChangeText={(text) => props.onChangeText(text)}
+      />
+    </BlurView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    height: 50,
-    backgroundColor: "#F6F6F6",
-    borderColor: "#E8E8E8",
-    borderWidth: 2,
-    padding: 16,
-    marginHorizontal: 16,
-    marginTop: 32,
+  input: {
+    height: 48,
+    backgroundColor: "#5249883D",
     fontFamily: "Inter_500Medium",
-    fontSize: 16,
-    borderRadius: 100,
+    fontSize: 12,
+    borderRadius: 4,
+    padding: 16,
+    color: "#FFFFFF",
   },
 });

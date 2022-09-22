@@ -1,8 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { FlatList, RefreshControl, View, StyleSheet } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import { Champion } from "../models/champion";
 import { ChampionService } from "../services/champion.service";
-import { ChampionItem, ChampionItemMemoized } from "./ChampionItem";
+import { ChampionItemMemoized } from "./ChampionItem";
 import { SearchBar } from "./SearchBar";
 
 export function ChampionList() {
@@ -38,27 +45,37 @@ export function ChampionList() {
   }, [newChampionsFiltered]);
 
   return (
-    <View style={styles.container}>
-      <SearchBar onChangeText={(text) => setSearchText(text)} />
-      <View style={styles.separator} />
-      <FlatList
-        data={championsFiltered}
-        renderItem={({ item }) => <ChampionItemMemoized champion={item} />}
-        keyExtractor={(item) => item.id.toString()}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        refreshing={isLoading}
-        refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={loadChampions} />
-        }
-      />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        style={styles.scrollContainer}
+        stickyHeaderIndices={[0]}
+        showsVerticalScrollIndicator={false}
+      >
+        <SearchBar onChangeText={(text: string) => setSearchText(text)} />
+        <View style={styles.separator} />
+        <FlatList
+          scrollEnabled={false}
+          data={championsFiltered}
+          renderItem={({ item }) => <ChampionItemMemoized champion={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          refreshing={isLoading}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={loadChampions} />
+          }
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#000814",
+  },
+  scrollContainer: {
+    padding: 32,
   },
   separator: {
     height: 16,

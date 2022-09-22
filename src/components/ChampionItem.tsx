@@ -1,37 +1,37 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useCallback } from "react";
 import {
-  View,
   Image,
+  ImageBackground,
+  StyleSheet,
   Text,
   TouchableHighlight,
-  StyleSheet,
+  View,
 } from "react-native";
-import { ScreenContainer } from "react-native-screens";
 import { Champion } from "../models/champion";
 
 export function ChampionItem({ champion }: { champion: Champion }) {
   const navigator = useNavigation();
 
-  const navigateToChampionDetail = () => {
+  const navigateToChampionDetail = useCallback(() => {
     navigator.navigate("ChampionDetail", { champion });
-  };
+  }, []);
 
   return (
     <TouchableHighlight
       activeOpacity={0.6}
       onPress={() => navigateToChampionDetail()}
     >
-      <View style={styles.container}>
-        <Image
-          source={{ uri: champion.image.full }}
-          style={styles.container.image}
-        />
-        <View style={styles.container.info}>
-          <Text style={styles.container.info.name}>{champion.name}</Text>
-          <Text style={styles.container.info.title}>{champion.title}</Text>
+      <ImageBackground
+        style={styles.background}
+        imageStyle={styles.backgroundImage}
+        source={{ uri: champion.image.splash }}
+      >
+        <View style={styles.container}>
+          <Image source={{ uri: champion.image.full }} style={styles.image} />
+          <Text style={styles.name}>{champion.name}</Text>
         </View>
-      </View>
+      </ImageBackground>
     </TouchableHighlight>
   );
 }
@@ -39,31 +39,37 @@ export function ChampionItem({ champion }: { champion: Champion }) {
 export const ChampionItemMemoized = React.memo(ChampionItem);
 
 const styles = StyleSheet.create({
+  background: {
+    borderRadius: 52,
+    overflow: "hidden",
+  },
+  backgroundImage: {
+    borderColor: "#474D6680",
+    borderWidth: 0.5,
+    borderRadius: 52,
+  },
   container: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#00000080",
     flex: 1,
     flexDirection: "row",
-    backgroundColor: "#fff",
     alignItems: "center",
-    paddingHorizontal: 16,
-    image: {
-      borderRadius: 8,
-      height: 50,
-      width: 50,
-      marginRight: 16,
-    },
-    info: {
-      borderBottomColor: "#E8E8E8",
-      borderBottomWidth: 1,
-      paddingBottom: 16,
-      flexGrow: 1,
-      name: {
-        fontSize: 16,
-        fontFamily: "Inter_600SemiBold",
-      },
-      title: {
-        fontSize: 14,
-        fontFamily: "Inter_400Regular",
-      },
-    },
+    paddingVertical: 4,
+    paddingLeft: 4,
+    paddingRight: 22,
+  },
+  image: {
+    borderColor: "#474D6680",
+    borderWidth: 0.5,
+    borderRadius: 52,
+    height: 44,
+    width: 44,
+    marginRight: 8,
+  },
+  name: {
+    fontSize: 14,
+    fontFamily: "Inter_500Medium",
+    color: "#FFFFFF",
   },
 });
