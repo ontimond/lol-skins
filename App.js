@@ -17,6 +17,7 @@ import { useCallback } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { ChampionDetailMemoized } from "./src/components/ChampionDetail";
 import { ChampionList } from "./src/components/ChampionList";
+import { ChampionSkins } from "./src/components/ChampionSkins";
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -58,13 +59,14 @@ export default function App() {
           name="ChampionDetail"
           component={ChampionDetailMemoized}
           options={{
-            title: "Profile",
-            headerTitleStyle: {
-              ...styles.headerTitleStyle,
-              ...styles.headerTitleStyleDetail,
-            },
-            headerTransparent: true,
-            headerShown: true,
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ChampionSkins"
+          component={ChampionSkins}
+          options={{
+            headerShown: false,
           }}
         />
       </Stack.Navigator>
@@ -72,8 +74,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  headerTitleStyleDetail: {
-    color: "white",
-  },
-});
+const styles = StyleSheet.create({});

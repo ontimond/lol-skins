@@ -21,6 +21,7 @@ export function ChampionItem({ champion }: { champion: Champion }) {
     <TouchableHighlight
       activeOpacity={0.6}
       onPress={() => navigateToChampionDetail()}
+      style={styles.background}
     >
       <ImageBackground
         style={styles.background}

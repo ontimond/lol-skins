@@ -3,7 +3,7 @@ import { TextInput, StyleSheet } from "react-native";
 
 export function SearchBar(props) {
   return (
-    <BlurView tint="dark">
+    <BlurView tint="dark" style={styles.container}>
       <TextInput
         style={styles.input}
         placeholder="Search"
@@ -15,6 +15,10 @@ export function SearchBar(props) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    borderRadius: 4,
+    overflow: "hidden",
+  },
   input: {
     height: 48,
     backgroundColor: "#5249883D",

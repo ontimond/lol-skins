@@ -54,7 +54,6 @@ export function ChampionList() {
         <SearchBar onChangeText={(text: string) => setSearchText(text)} />
         <View style={styles.separator} />
         <FlatList
-          scrollEnabled={false}
           data={championsFiltered}
           renderItem={({ item }) => <ChampionItemMemoized champion={item} />}
           keyExtractor={(item) => item.id.toString()}
