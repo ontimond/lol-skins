@@ -1,4 +1,8 @@
-import { API_CHAMP_SQUARE_IMG_URL, API_CHAMP_SPLASH_IMG_URL } from "@env";
+import {
+  API_CHAMP_SQUARE_IMG_URL,
+  API_CHAMP_SPLASH_IMG_URL,
+  API_CHAMP_LOADING_IMG_URL,
+} from "@env";
 
 export class ChampionImage {
   constructor(
@@ -43,9 +47,15 @@ export class ChampionSkin {
     private champion: Champion
   ) {}
 
-  public get full(): string {
+  public get splash(): string {
     return (
       API_CHAMP_SPLASH_IMG_URL + this.champion.id + "_" + this.num + ".jpg"
+    );
+  }
+
+  public get loading(): string {
+    return (
+      API_CHAMP_LOADING_IMG_URL + this.champion.id + "_" + this.num + ".jpg"
     );
   }
 }

@@ -14,7 +14,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback } from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { ChampionDetailMemoized } from "./src/components/ChampionDetail";
 import { ChampionList } from "./src/components/ChampionList";
 import { ChampionSkins } from "./src/components/ChampionSkins";
