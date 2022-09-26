@@ -1,8 +1,5 @@
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { NavigationProp, Route } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { THREE } from "expo-three";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   Image,
   ImageBackground,
@@ -11,34 +8,36 @@ import {
   Text,
   View,
 } from "react-native";
+import { connect } from "react-redux";
 import { Champion } from "../models/champion";
-
-const Tab = createMaterialTopTabNavigator();
-
-global.THREE = global.THREE || THREE;
-
-export function ChampionImage(props) {
-  const champion = props.champion as Champion;
-
-  return (
-    <View style={styles.imageContainer}>
-      <Image source={{ uri: champion.image.full }} style={styles.image} />
-    </View>
-  );
-}
+import { addToFavorites, removeFromFavorites } from "../redux/actions";
 
 export function ChampionDetail({
+  favoriteChampions,
+  addToFavorites,
+  removeFromFavorites,
   route,
   navigation,
-}: {
-  route: Route<"championDetails", { champion: Champion }>;
-  navigation: NavigationProp<any>;
-}) {
+}: props) {
   const { champion } = route.params;
 
   const goToSkins = useCallback(() => {
     navigation.navigate("ChampionSkins", { champion });
   }, []);
+
+  const isFavorite = useMemo(() => {
+    return favoriteChampions.some(
+      (favChampion: Champion) => favChampion.id === champion.id
+    );
+  }, [favoriteChampions, champion]);
+
+  const onFavoritePress = useCallback(() => {
+    if (isFavorite) {
+      removeFromFavorites(champion.id);
+    } else {
+      addToFavorites(champion.id);
+    }
+  }, [isFavorite]);
 
   return (
     <View style={styles.container}>
@@ -61,8 +60,13 @@ export function ChampionDetail({
       </Pressable>
       <View style={styles.separator} />
       <View style={styles.actions}>
-        <Pressable style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>Save</Text>
+        <Pressable
+          style={styles.actionButton}
+          onPress={() => onFavoritePress()}
+        >
+          <Text style={styles.actionButtonText}>
+            {isFavorite ? "Unsave" : "Save"}
+          </Text>
         </Pressable>
         <Pressable style={styles.actionButton}>
           <Text style={styles.actionButtonText}>Share</Text>
@@ -168,3 +172,21 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
 });
+
+const mapStateToProps = (state) => {
+  return {
+    favoriteChampions: state.favoriteChampions,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToFavorites: (id) => dispatch(addToFavorites(id)),
+    removeFromFavorites: (id) => dispatch(removeFromFavorites(id)),
+  };
+};
+
+export const ChampionDetailConnected = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ChampionDetailMemoized);
