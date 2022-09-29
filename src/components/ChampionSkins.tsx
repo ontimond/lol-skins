@@ -33,7 +33,9 @@ export function ChampionSkins(
     <View style={styles.container}>
       <ImageBackground
         style={styles.background}
-        source={{ uri: champion.skins[currentSkin].splash }}
+        source={{
+          uri: champion.skins[currentSkin].splash,
+        }}
       >
         <LinearGradient
           style={styles.backgroundGradient}
@@ -73,6 +75,8 @@ export function ChampionSkins(
     </View>
   );
 }
+
+export const ChampionSkinsMemoized = React.memo(ChampionSkins);
 
 const styles = StyleSheet.create({
   container: {

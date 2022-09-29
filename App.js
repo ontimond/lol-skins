@@ -17,9 +17,10 @@ import { useCallback } from "react";
 import { StyleSheet } from "react-native";
 import { ChampionDetailConnected } from "./src/components/ChampionDetail";
 import { ChampionListConnected } from "./src/components/ChampionList";
-import { ChampionSkins } from "./src/components/ChampionSkins";
+import { ChampionSkinsMemoized } from "./src/components/ChampionSkins";
 import { Provider } from "react-redux";
-import { store } from "./src/redux/store";
+import { persistor, store } from "./src/redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -49,31 +50,33 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer onReady={onReady}>
-        <Stack.Navigator initialRouteName="ChampionList">
-          <Stack.Screen
-            name="ChampionList"
-            component={ChampionListConnected}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="ChampionDetail"
-            component={ChampionDetailConnected}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="ChampionSkins"
-            component={ChampionSkins}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer onReady={onReady}>
+          <Stack.Navigator initialRouteName="ChampionList">
+            <Stack.Screen
+              name="ChampionList"
+              component={ChampionListConnected}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="ChampionDetail"
+              component={ChampionDetailConnected}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="ChampionSkins"
+              component={ChampionSkinsMemoized}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }

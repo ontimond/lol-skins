@@ -39,27 +39,28 @@ export function ChampionList(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollContainer}
+      <FlatList
+        style={styles.list}
+        data={championsFiltered}
+        renderItem={({ item }) => <ChampionItemMemoized champion={item} />}
+        keyExtractor={(item) => item.id.toString()}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        refreshing={isLoading}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={() => loadChampions()}
+          />
+        }
+        ListHeaderComponent={() => (
+          <>
+            <SearchBar onChangeText={(text: string) => setSearchText(text)} />
+            <View style={styles.separator} />
+          </>
+        )}
         stickyHeaderIndices={[0]}
-        showsVerticalScrollIndicator={false}
-      >
-        <SearchBar onChangeText={(text: string) => setSearchText(text)} />
-        <View style={styles.separator} />
-        <FlatList
-          data={championsFiltered}
-          renderItem={({ item }) => <ChampionItemMemoized champion={item} />}
-          keyExtractor={(item) => item.id.toString()}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          refreshing={isLoading}
-          refreshControl={
-            <RefreshControl
-              refreshing={isLoading}
-              onRefresh={() => loadChampions()}
-            />
-          }
-        />
-      </ScrollView>
+        initialNumToRender={10}
+      />
     </SafeAreaView>
   );
 }
@@ -69,7 +70,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#000814",
   },
-  scrollContainer: {
+  list: {
+    flex: 1,
     padding: 32,
   },
   separator: {

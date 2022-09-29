@@ -11,6 +11,10 @@ import {
 import { connect } from "react-redux";
 import { Champion } from "../models/champion";
 import { addToFavorites, removeFromFavorites } from "../redux/actions";
+import HeartIcon from "../icons/Heart";
+import HeartBrokenIcon from "../icons/HeartBroken";
+import ShareIcon from "../icons/Share";
+import RateIcon from "../icons/Rate";
 
 export function ChampionDetail({
   favoriteChampions,
@@ -64,14 +68,15 @@ export function ChampionDetail({
           style={styles.actionButton}
           onPress={() => onFavoritePress()}
         >
-          <Text style={styles.actionButtonText}>
-            {isFavorite ? "Unsave" : "Save"}
-          </Text>
+          {isFavorite ? <HeartIcon /> : <HeartBrokenIcon />}
+          <Text style={styles.actionButtonText}>Like</Text>
         </Pressable>
         <Pressable style={styles.actionButton}>
+          <ShareIcon />
           <Text style={styles.actionButtonText}>Share</Text>
         </Pressable>
         <Pressable style={styles.actionButton}>
+          <RateIcon />
           <Text style={styles.actionButtonText}>Rate</Text>
         </Pressable>
       </View>
@@ -142,6 +147,7 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: "row",
+    paddingVertical: 16,
   },
   actionButton: {
     flex: 1,
@@ -153,6 +159,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "Inter_400Regular",
     fontSize: 12,
+    marginTop: 8,
   },
   divider: {
     backgroundColor: "#C1C4D6",
