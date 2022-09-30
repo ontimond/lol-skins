@@ -1,12 +1,13 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useMemo } from "react";
 import {
-  Image,
   ImageBackground,
   Pressable,
   StyleSheet,
   Text,
   View,
+  Share,
+  Linking,
 } from "react-native";
 import { connect } from "react-redux";
 import { Champion } from "../models/champion";
@@ -26,6 +27,7 @@ export function ChampionDetail({
   const { champion } = route.params;
 
   const goToSkins = useCallback(() => {
+    // Send to the skins screen
     navigation.navigate("ChampionSkins", { champion });
   }, []);
 
@@ -42,6 +44,30 @@ export function ChampionDetail({
       addToFavorites(champion.id);
     }
   }, [isFavorite]);
+
+  const OPGGUrl = useMemo(() => {
+    return `https://www.op.gg/champions/${champion.name}`;
+  }, [champion]);
+
+  const onSharePress = useCallback(async () => {
+    console.log(champion);
+    const result = await Share.share({
+      message: `Check out ${champion.name} on League of Legends!`,
+      url: OPGGUrl,
+    });
+
+    if (result.action === Share.sharedAction) {
+      alert("Shared!");
+    }
+  }, []);
+
+  const onRatePress = useCallback(async () => {
+    const url = OPGGUrl;
+
+    if (Linking.canOpenURL(url)) {
+      await Linking.openURL(url);
+    }
+  }, [champion]);
 
   return (
     <View style={styles.container}>
@@ -71,11 +97,11 @@ export function ChampionDetail({
           {isFavorite ? <HeartIcon /> : <HeartBrokenIcon />}
           <Text style={styles.actionButtonText}>Like</Text>
         </Pressable>
-        <Pressable style={styles.actionButton}>
+        <Pressable style={styles.actionButton} onPress={() => onSharePress()}>
           <ShareIcon />
           <Text style={styles.actionButtonText}>Share</Text>
         </Pressable>
-        <Pressable style={styles.actionButton}>
+        <Pressable style={styles.actionButton} onPress={() => onRatePress()}>
           <RateIcon />
           <Text style={styles.actionButtonText}>Rate</Text>
         </Pressable>

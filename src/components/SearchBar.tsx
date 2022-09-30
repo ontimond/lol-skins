@@ -9,6 +9,10 @@ export function SearchBar(props) {
         placeholder="Search"
         placeholderTextColor="#D0CAF4"
         onChangeText={(text) => props.onChangeText(text)}
+        value={props.value}
+        clearButtonMode="always"
+        autoCorrect={false}
+        autoCapitalize="none"
       />
     </BlurView>
   );

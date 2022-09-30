@@ -52,14 +52,16 @@ export function ChampionList(props) {
             onRefresh={() => loadChampions()}
           />
         }
-        ListHeaderComponent={() => (
+        ListHeaderComponent={
           <>
-            <SearchBar onChangeText={(text: string) => setSearchText(text)} />
+            <SearchBar
+              value={searchText}
+              onChangeText={(text: string) => setSearchText(text)}
+            />
             <View style={styles.separator} />
           </>
-        )}
+        }
         stickyHeaderIndices={[0]}
-        initialNumToRender={10}
       />
     </SafeAreaView>
   );
