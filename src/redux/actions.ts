@@ -1,4 +1,5 @@
 import { ChampionService } from "../services/champion.service";
+import { AppDispatch } from "./store";
 
 export enum ChampionActionTypes {
   CHAMPION_LOADING = "CHAMPION_LOADING",
@@ -10,7 +11,7 @@ export enum ChampionActionTypes {
 
 const championService = new ChampionService();
 
-export const loadChampions = () => async (dispatch) => {
+export const loadChampions = () => async (dispatch: AppDispatch) => {
   try {
     dispatch({ type: ChampionActionTypes.CHAMPION_LOADING });
     const champions = await championService.getChampions();
@@ -26,14 +27,14 @@ export const loadChampions = () => async (dispatch) => {
   }
 };
 
-export const addToFavorites = (id: any) => {
+export const addToFavorites = (id: number) => {
   return {
     type: ChampionActionTypes.ADD_TO_FAVORITES,
     payload: id,
   };
 };
 
-export const removeFromFavorites = (id: any) => {
+export const removeFromFavorites = (id: number) => {
   return {
     type: ChampionActionTypes.REMOVE_FROM_FAVORITES,
     payload: id,

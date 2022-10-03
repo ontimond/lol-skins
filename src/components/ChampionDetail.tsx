@@ -9,28 +9,33 @@ import {
   Share,
   Linking,
 } from "react-native";
-import { connect } from "react-redux";
 import { Champion } from "../models/champion";
 import { addToFavorites, removeFromFavorites } from "../redux/actions";
 import HeartIcon from "../icons/Heart";
 import HeartBrokenIcon from "../icons/HeartBroken";
 import ShareIcon from "../icons/Share";
 import RateIcon from "../icons/Rate";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../App";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
-export function ChampionDetail({
-  favoriteChampions,
-  addToFavorites,
-  removeFromFavorites,
-  route,
-  navigation,
-}: props) {
+type Props = NativeStackScreenProps<RootStackParamList, "ChampionDetail">;
+
+export function ChampionDetail({ route, navigation }: Props) {
+  // Champion passed from the previous screen
   const { champion } = route.params;
+
+  // Redux state and dispatch
+  const favoriteChampions = useAppSelector((state) => state.favoriteChampions);
+  const dispatch = useAppDispatch();
 
   const goToSkins = useCallback(() => {
     // Send to the skins screen
     navigation.navigate("ChampionSkins", { champion });
-  }, []);
+  }, [navigation]);
 
+  // Check if the champion is in the favorites
+  // memoize the result
   const isFavorite = useMemo(() => {
     return favoriteChampions.some(
       (favChampion: Champion) => favChampion.id === champion.id
@@ -39,9 +44,9 @@ export function ChampionDetail({
 
   const onFavoritePress = useCallback(() => {
     if (isFavorite) {
-      removeFromFavorites(champion.id);
+      dispatch(removeFromFavorites(champion.id));
     } else {
-      addToFavorites(champion.id);
+      dispatch(addToFavorites(champion.id));
     }
   }, [isFavorite]);
 
@@ -50,7 +55,6 @@ export function ChampionDetail({
   }, [champion]);
 
   const onSharePress = useCallback(async () => {
-    console.log(champion);
     const result = await Share.share({
       message: `Check out ${champion.name} on League of Legends!`,
       url: OPGGUrl,
@@ -205,21 +209,3 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
 });
-
-const mapStateToProps = (state) => {
-  return {
-    favoriteChampions: state.favoriteChampions,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addToFavorites: (id) => dispatch(addToFavorites(id)),
-    removeFromFavorites: (id) => dispatch(removeFromFavorites(id)),
-  };
-};
-
-export const ChampionDetailConnected = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChampionDetailMemoized);

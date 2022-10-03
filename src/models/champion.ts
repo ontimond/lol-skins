@@ -5,6 +5,9 @@ import {
 } from "@env";
 
 export class ChampionImage {
+  public full: string;
+  public splash: string;
+
   constructor(
     private readonly _full: string,
     private readonly _sprite: string,
@@ -14,14 +17,9 @@ export class ChampionImage {
     public w: number,
     public h: number,
     public champion: Champion
-  ) {}
-
-  public get full(): string {
-    return API_CHAMP_SQUARE_IMG_URL + this._full;
-  }
-
-  public get splash(): string {
-    return API_CHAMP_SPLASH_IMG_URL + this.champion.id + "_0.jpg";
+  ) {
+    this.full = API_CHAMP_SQUARE_IMG_URL + this._full;
+    this.splash = API_CHAMP_SPLASH_IMG_URL + this.champion.id + "_0.jpg";
   }
 }
 
@@ -39,24 +37,19 @@ export class Champion {
 }
 
 export class ChampionSkin {
+  public splash: string;
+  public loading: string;
   constructor(
     public id: number,
     public num: number,
     public name: string,
     public chromas: boolean,
     private champion: Champion
-  ) {}
-
-  public get splash(): string {
-    return (
-      API_CHAMP_SPLASH_IMG_URL + this.champion.id + "_" + this.num + ".jpg"
-    );
-  }
-
-  public get loading(): string {
-    return (
-      API_CHAMP_LOADING_IMG_URL + this.champion.id + "_" + this.num + ".jpg"
-    );
+  ) {
+    this.splash =
+      API_CHAMP_SPLASH_IMG_URL + this.champion.id + "_" + this.num + ".jpg";
+    this.loading =
+      API_CHAMP_LOADING_IMG_URL + this.champion.id + "_" + this.num + ".jpg";
   }
 }
 

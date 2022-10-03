@@ -1,20 +1,42 @@
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   FlatList,
   RefreshControl,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   View,
 } from "react-native";
-import { connect } from "react-redux";
+import { RootStackParamList } from "../../App";
 import { Champion } from "../models/champion";
 import { loadChampions } from "../redux/actions";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { ChampionItemMemoized } from "./ChampionItem";
 import { SearchBar } from "./SearchBar";
 
-export function ChampionList(props) {
-  const { champions, isLoading, loadChampions } = props;
+export type ChampionListNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "ChampionList"
+>;
+
+const renderItem = ({ item }) => <ChampionItemMemoized champion={item} />;
+const itemSeparator = () => <View style={styles.separator} />;
+const keyExtractor: (item: any, index: number) => string = (item) =>
+  item.id.toString();
+const itemLayout = (
+  data: any[],
+  index: number
+): { length: number; offset: number; index: number } => ({
+  length: 52,
+  offset: 52 * index,
+  index,
+});
+
+export function ChampionList() {
+  // Redux state and dispatch
+  const champions = useAppSelector((state) => state.champions);
+  const isLoading = useAppSelector((state) => state.isLoading);
+  const dispatch = useAppDispatch();
 
   const [championsFiltered, setChampionsFiltered] = useState<Champion[]>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -30,7 +52,7 @@ export function ChampionList(props) {
   }, [champions, searchText]);
 
   useEffect(() => {
-    loadChampions();
+    dispatch(loadChampions());
   }, []);
 
   useEffect(() => {
@@ -42,16 +64,19 @@ export function ChampionList(props) {
       <FlatList
         style={styles.list}
         data={championsFiltered}
-        renderItem={({ item }) => <ChampionItemMemoized champion={item} />}
-        keyExtractor={(item) => item.id.toString()}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        ItemSeparatorComponent={itemSeparator}
         refreshing={isLoading}
+        getItemLayout={itemLayout}
+        initialNumToRender={10}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
-            onRefresh={() => loadChampions()}
+            onRefresh={() => dispatch(loadChampions())}
           />
         }
+        contentContainerStyle={{ paddingBottom: 52 }}
         ListHeaderComponent={
           <>
             <SearchBar
@@ -73,23 +98,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#000814",
   },
   list: {
-    flex: 1,
     padding: 32,
   },
   separator: {
     height: 16,
   },
 });
-
-const mapStateToProps = (state: any) => ({
-  champions: state.champions,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-  loadChampions: () => dispatch(loadChampions()),
-});
-
-export const ChampionListConnected = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChampionList);

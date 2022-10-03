@@ -9,9 +9,10 @@ import {
   View,
 } from "react-native";
 import { Champion } from "../models/champion";
+import { ChampionListNavigationProp } from "./ChampionList";
 
 export function ChampionItem({ champion }: { champion: Champion }) {
-  const navigator = useNavigation();
+  const navigator = useNavigation<ChampionListNavigationProp>();
 
   const navigateToChampionDetail = useCallback(() => {
     navigator.navigate("ChampionDetail", { champion });
