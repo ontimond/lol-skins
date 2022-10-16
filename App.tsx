@@ -21,6 +21,7 @@ import { persistor, store } from "./src/redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { Champion } from "./src/models/champion";
 import { ChampionDetailMemoized } from "./src/components/ChampionDetail";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -60,28 +61,35 @@ export default function App() {
   }
 
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <NavigationContainer onReady={onReady}>
-          <RootStack.Navigator initialRouteName="ChampionList">
-            <RootStack.Screen
-              name="ChampionList"
-              component={ChampionList}
-              options={screenOptions}
-            />
-            <RootStack.Screen
-              name="ChampionDetail"
-              component={ChampionDetailMemoized}
-              options={screenOptions}
-            />
-            <RootStack.Screen
-              name="ChampionSkins"
-              component={ChampionSkinsMemoized}
-              options={screenOptions}
-            />
-          </RootStack.Navigator>
-        </NavigationContainer>
-      </PersistGate>
-    </Provider>
+    <>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <NavigationContainer onReady={onReady}>
+            <RootStack.Navigator initialRouteName="ChampionList">
+              <RootStack.Screen
+                name="ChampionList"
+                component={ChampionList}
+                options={screenOptions}
+              />
+              <RootStack.Screen
+                name="ChampionDetail"
+                component={ChampionDetailMemoized}
+                options={screenOptions}
+              />
+              <RootStack.Screen
+                name="ChampionSkins"
+                component={ChampionSkinsMemoized}
+                options={screenOptions}
+              />
+            </RootStack.Navigator>
+          </NavigationContainer>
+        </PersistGate>
+      </Provider>
+
+      <StatusBar style="light" />
+    </>
   );
+}
+function setStatusBarStyle(arg0: string, arg1: boolean) {
+  throw new Error("Function not implemented.");
 }

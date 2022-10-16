@@ -3353,6 +3353,11 @@ expo-splash-screen@^0.16.2, expo-splash-screen@~0.16.0:
     "@expo/configure-splash-screen" "^0.6.0"
     "@expo/prebuild-config" "~5.0.0"
 
+expo-status-bar@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.4.0.tgz#c0317de2c53878340f4b4f00ff7e4ba14399a7fb"
+  integrity sha512-vh98g8qMIjig/2XTBsoAWS6Vo2dIIwDWjB3/GiuZ9Lazpxc9GO/APfJ4dar7MibzIDUKIrjotrcL6rLdPH13Ew==
+
 expo-three@^6.1.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/expo-three/-/expo-three-6.2.0.tgz#35319161d4706ed6f4f4fc63cb75c9ef4406bb5f"

@@ -1,6 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import {
+  Animated,
   ImageBackground,
   Pressable,
   StyleSheet,
@@ -12,7 +13,6 @@ import {
 import { Champion } from "../models/champion";
 import { addToFavorites, removeFromFavorites } from "../redux/actions";
 import HeartIcon from "../icons/Heart";
-import HeartBrokenIcon from "../icons/HeartBroken";
 import ShareIcon from "../icons/Share";
 import RateIcon from "../icons/Rate";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -22,6 +22,24 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 type Props = NativeStackScreenProps<RootStackParamList, "ChampionDetail">;
 
 export function ChampionDetail({ route, navigation }: Props) {
+  // Heart icon animation
+  const heartScale = useRef(new Animated.Value(1)).current;
+
+  const fadeInOut = () => {
+    Animated.sequence([
+      Animated.timing(heartScale, {
+        toValue: 1.2,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(heartScale, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
   // Champion passed from the previous screen
   const { champion } = route.params;
 
@@ -43,6 +61,9 @@ export function ChampionDetail({ route, navigation }: Props) {
   }, [favoriteChampions, champion]);
 
   const onFavoritePress = useCallback(() => {
+    // Run the animation
+    fadeInOut();
+
     if (isFavorite) {
       dispatch(removeFromFavorites(champion.id));
     } else {
@@ -98,7 +119,9 @@ export function ChampionDetail({ route, navigation }: Props) {
           style={styles.actionButton}
           onPress={() => onFavoritePress()}
         >
-          {isFavorite ? <HeartIcon /> : <HeartBrokenIcon />}
+          <Animated.View style={{ transform: [{ scale: heartScale }] }}>
+            <HeartIcon fill={isFavorite ? "#ED55C2" : "#FFF"} />
+          </Animated.View>
           <Text style={styles.actionButtonText}>Like</Text>
         </Pressable>
         <Pressable style={styles.actionButton} onPress={() => onSharePress()}>

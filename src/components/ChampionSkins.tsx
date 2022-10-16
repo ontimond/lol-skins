@@ -3,6 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useRef } from "react";
 import {
   Image,
+  Text,
   StyleSheet,
   Dimensions,
   ImageBackground,
@@ -45,27 +46,29 @@ export function ChampionSkins(
       <View style={styles.carouselContainer}>
         <Carousel
           ref={carouselRef}
-          layout="default"
           data={champion.skins}
           inactiveSlideScale={0.87}
           inactiveSlideOpacity={0.4}
           onSnapToItem={updateCurrentSkin}
-          renderItem={(skin) => (
-            <Pressable
-              onPress={() => {
-                carouselRef.current.snapToItem(skin.index);
-              }}
-            >
-              <LinearGradient
-                style={styles.loadingImageContainer}
-                colors={["#FFF", "#FFB020"]}
+          renderItem={({ item: skin, index }) => (
+            <>
+              <Pressable
+                onPress={() => {
+                  carouselRef.current.snapToItem(index);
+                }}
               >
-                <Image
-                  style={styles.loadingImage}
-                  source={{ uri: skin.item.loading }}
-                ></Image>
-              </LinearGradient>
-            </Pressable>
+                <LinearGradient
+                  style={styles.loadingImageContainer}
+                  colors={["#FFF", "#FFB020"]}
+                >
+                  <Image
+                    style={styles.loadingImage}
+                    source={{ uri: skin.loading }}
+                  ></Image>
+                </LinearGradient>
+              </Pressable>
+              <Text style={styles.skinName}>{skin.name}</Text>
+            </>
           )}
           itemWidth={95}
           sliderWidth={Dimensions.get("window").width}
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
   },
   loadingImage: {
     width: "100%",
-    height: "100%",
+    height: 168,
     borderWidth: 2,
     borderColor: "#000814",
   },
@@ -101,6 +104,13 @@ const styles = StyleSheet.create({
     height: undefined,
     aspectRatio: 989 / 584,
   },
+  skinName: {
+    color: "#8F95B2",
+    textAlign: "center",
+    fontSize: 12,
+    fontFamily: "Inter_500Medium",
+    marginTop: 8,
+  },
   backgroundGradient: {
     flex: 1,
   },
@@ -108,7 +118,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 130,
     left: 0,
-    height: 168,
     width: Dimensions.get("window").width,
   },
 });

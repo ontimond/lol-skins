@@ -4,10 +4,7 @@
     "slug": "skins",
     "version": "1.0.0",
     "sdkVersion": "46.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ]
+    "platforms": ["ios", "android", "web"],
+    "userInterfaceStyle": "dark"
   }
 }
