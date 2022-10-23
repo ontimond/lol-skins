@@ -24,7 +24,7 @@ const itemSeparator = () => <View style={styles.separator} />;
 const keyExtractor: (item: any, index: number) => string = (item) =>
   item.id.toString();
 const itemLayout = (
-  data: any[],
+  _data: any[],
   index: number
 ): { length: number; offset: number; index: number } => ({
   length: 52,
@@ -87,6 +87,7 @@ export function ChampionList() {
           </>
         }
         stickyHeaderIndices={[0]}
+        maxToRenderPerBatch={10}
       />
     </SafeAreaView>
   );

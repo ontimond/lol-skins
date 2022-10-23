@@ -90,6 +90,3 @@ export default function App() {
     </>
   );
 }
-function setStatusBarStyle(arg0: string, arg1: boolean) {
-  throw new Error("Function not implemented.");
-}
